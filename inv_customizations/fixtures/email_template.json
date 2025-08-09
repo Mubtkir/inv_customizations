@@ -1,0 +1,12 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Email Template",
+  "modified": "2025-08-09 08:33:15.236738",
+  "name": "Booking Email Template",
+  "response": "<div class=\"ql-editor read-mode\"><p>this is booking {{name}}</p></div>",
+  "response_html": null,
+  "subject": "Booking Created",
+  "use_html": 0
+ }
+]
