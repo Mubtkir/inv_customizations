@@ -1,6 +1,8 @@
-### Inv Customizations
+# Innovative Smart Vision Customizations
 
-Frappe application for Innvative smart Vision for custom customizations
+**INV Customizations** is a full-featured custom app built with the [Frappe Framework](https://frappeframework.com).
+
+---
 
 ### Installation
 
@@ -8,7 +10,7 @@ You can install this app using the [bench](https://github.com/frappe/bench) CLI:
 
 ```bash
 cd $PATH_TO_YOUR_BENCH
-bench get-app $URL_OF_THIS_REPO --branch develop
+bench get-app inv_customizations https://github.com/khayamkhan852/inv_customizations.git
 bench install-app inv_customizations
 ```
 
