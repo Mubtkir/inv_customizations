@@ -13,20 +13,19 @@
   "company",
   "column_break_sjyj",
   "issue_date",
-  "issue_time",
   "sales_person",
+  "notes",
+  "status",
   "column_break_bjgm",
   "start_date",
   "end_date",
+  "amended_from",
   "create_sales_invoice",
   "send_email",
   "items_section",
   "items",
   "section_break_jmzt",
   "total",
-  "note_section",
-  "note",
-  "amended_from",
   "email_tab",
   "email_template"
  ],
@@ -57,23 +56,13 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "Today",
+   "default": "Now",
    "fieldname": "issue_date",
-   "fieldtype": "Date",
+   "fieldtype": "Datetime",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Issue Date",
    "no_copy": 1,
-   "reqd": 1,
-   "search_index": 1
-  },
-  {
-   "default": "Now",
-   "fieldname": "issue_time",
-   "fieldtype": "Time",
-   "label": "Issue Time",
-   "no_copy": 1,
-   "print_hide": 1,
    "reqd": 1,
    "search_index": 1
   },
@@ -119,20 +108,10 @@
   },
   {
    "fieldname": "sales_person",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Sales Person",
-   "translatable": 1
-  },
-  {
-   "collapsible": 1,
-   "fieldname": "note_section",
-   "fieldtype": "Section Break",
-   "label": "Note"
-  },
-  {
-   "fieldname": "note",
-   "fieldtype": "Text Editor",
-   "label": "Note"
+   "options": "Sales Person"
   },
   {
    "fieldname": "items_section",
@@ -204,13 +183,27 @@
    "label": "Email Template",
    "options": "Email Template",
    "reqd": 1
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Data",
+   "label": "Notes"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Pending\nBooked\nAvailable",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-08-09 09:18:12.777200",
+ "modified": "2025-08-14 12:09:22.428771",
  "modified_by": "Administrator",
  "module": "Inv Customizations",
  "name": "Booking",

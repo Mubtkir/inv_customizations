@@ -3,7 +3,8 @@
 
 import frappe
 from frappe.model.document import Document
-from frappe.utils import nowdate, nowtime, add_days
+from frappe.utils import nowdate, nowtime, now_datetime, get_datetime
+from frappe import _
 
 class Booking(Document):
 	# begin: auto-generated types
@@ -22,28 +23,48 @@ class Booking(Document):
 		customer_name: DF.SmallText | None
 		email_template: DF.Link
 		end_date: DF.Datetime
-		issue_date: DF.Date
-		issue_time: DF.Time
+		issue_date: DF.Datetime
 		items: DF.Table[BookingItem]
 		naming_series: DF.Literal["Booking-.YYYY.-"]
-		note: DF.TextEditor | None
-		sales_person: DF.Data | None
+		notes: DF.Data | None
+		sales_person: DF.Link | None
 		send_email: DF.Check
 		start_date: DF.Datetime
+		status: DF.Literal["Pending", "Booked", "Available"]
 		title: DF.Data | None
 		total: DF.Currency
 	# end: auto-generated types
 	
 	def validate(self):
+		self.check_end_date()
 		self.set_amount_in_items()
 		self.calculate_total()
 
 	def on_submit(self):
+		self.setStatus()
+
 		if self.create_sales_invoice:
 			self.create_sales_invoice_auto()
 			
 		if self.send_email:
 			self.send_email_to_customer()
+
+	def check_end_date(self):
+		if self.end_date and self.start_date and self.end_date < self.start_date:
+			frappe.throw(
+				_("End Date cannot be before Start Date"),
+				title=_("Invalid Dates")
+			)
+
+	def setStatus(self):
+		now = now_datetime()
+		
+		if get_datetime(self.start_date) <= now <= get_datetime(self.end_date):
+			self.status = "Booked"
+		elif get_datetime(self.end_date) <= now:
+			self.status = "Available"
+		else:
+			self.status = "Pending"
 
 	def send_email_to_customer(self):
 		emails = get_customer_emails(self.customer)
@@ -114,3 +135,41 @@ def get_customer_emails(customer):
 				emails.append(email.email_id)
 	
 	return emails if emails else None
+
+def refresh_booking_statuses():
+    """Auto-update Booking.status based on start/end datetimes."""
+
+    now = now_datetime()
+
+    to_book = frappe.get_all(
+        "Booking",
+        filters={
+            "status": ["!=", "Booked"],
+            "start_date": ["<=", now],
+            "end_date": [">",  now],
+			'docstatus': 1,
+        },
+       fields=['name']
+    )
+
+    if to_book:
+        _bulk_update_status(to_book, "Booked")
+
+    to_available_after = frappe.get_all(
+        "Booking",
+        filters={
+            "status": ["!=", "Available"],
+            "end_date": ["<=", now],
+			'docstatus': 1,
+        },
+        pluck="name",
+    )
+    if to_available_after:
+        _bulk_update_status(to_available_after, "Available")
+
+def _bulk_update_status(names: list[str], status: str):
+    for name in names:
+        doc = frappe.get_doc("Booking", name)
+        doc.status = status
+        doc.save(ignore_permissions=True)
+    frappe.db.commit()

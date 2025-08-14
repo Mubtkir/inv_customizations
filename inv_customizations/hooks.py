@@ -152,23 +152,28 @@ fixtures = [
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"inv_customizations.tasks.all"
-# 	],
-# 	"daily": [
-# 		"inv_customizations.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"inv_customizations.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"inv_customizations.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"inv_customizations.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+    "cron": {
+        "* * * * *": [
+            "inv_customizations.inv_customizations.doctype.booking.booking.refresh_booking_statuses"
+        ]
+    }
+	# "all": [
+	# 	"inv_customizations.tasks.all"
+	# ],
+	# "daily": [
+	# 	"inv_customizations.tasks.daily"
+	# ],
+	# "hourly": [
+	# 	"inv_customizations.tasks.hourly"
+	# ],
+	# "weekly": [
+	# 	"inv_customizations.tasks.weekly"
+	# ],
+	# "monthly": [
+	# 	"inv_customizations.tasks.monthly"
+	# ],
+}
 
 # Testing
 # -------

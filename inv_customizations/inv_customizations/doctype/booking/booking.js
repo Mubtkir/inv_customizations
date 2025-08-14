@@ -4,7 +4,7 @@
 frappe.ui.form.on("Booking", {
 	refresh(frm) {
 
-	},
+	},  
     calculate_total_amount(frm) {
         let total = 0;
 
@@ -23,7 +23,7 @@ frappe.ui.form.on("Booking Item", {
 
     qty(frm, cdt, cdn) {
         const item = locals[cdt][cdn];
-        
+
         if (item.rate && item.qty) {
             const total = item.rate * item.qty;
             const discount = (item.discount_amount / 100) * total;
@@ -47,15 +47,15 @@ frappe.ui.form.on("Booking Item", {
 
     discount_amount(frm, cdt, cdn) {
         const item = locals[cdt][cdn];
-        
+
         if (item.discount_amount > 100) {
             frappe.model.set_value(cdt, cdn, 'discount_amount', 100.0);
         }
 
         if (item.discount_amount < 0) {
             frappe.model.set_value(cdt, cdn, 'discount_amount', 0.0);
-        }   
-        
+        }        
+
         if (item.rate && item.qty) {
             const total = item.rate * item.qty;
             const discount = (item.discount_amount / 100) * total;
