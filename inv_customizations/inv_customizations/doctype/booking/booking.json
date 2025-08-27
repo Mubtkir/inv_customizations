@@ -22,9 +22,14 @@
   "amended_from",
   "create_sales_invoice",
   "send_email",
+  "currency_and_price_list",
+  "selling_price_list",
   "items_section",
   "items",
   "section_break_jmzt",
+  "sales_tax_template",
+  "cost_center",
+  "column_break_jcrs",
   "total",
   "email_tab",
   "email_template"
@@ -197,13 +202,44 @@
    "label": "Status",
    "options": "Pending\nBooked\nAvailable",
    "reqd": 1
+  },
+  {
+   "fieldname": "column_break_jcrs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sales_tax_template",
+   "fieldtype": "Link",
+   "label": "Sales Taxes and Charges Template",
+   "options": "Sales Taxes and Charges Template"
+  },
+  {
+   "fieldname": "cost_center",
+   "fieldtype": "Link",
+   "label": "Cost Center",
+   "options": "Cost Center"
+  },
+  {
+   "collapsible": 1,
+   "depends_on": "customer",
+   "fieldname": "currency_and_price_list",
+   "fieldtype": "Section Break",
+   "label": "Currency and Price List"
+  },
+  {
+   "fieldname": "selling_price_list",
+   "fieldtype": "Link",
+   "label": "Price List",
+   "options": "Price List",
+   "print_hide": 1,
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-08-14 12:09:22.428771",
+ "modified": "2025-08-27 10:57:29.075617",
  "modified_by": "Administrator",
  "module": "Inv Customizations",
  "name": "Booking",

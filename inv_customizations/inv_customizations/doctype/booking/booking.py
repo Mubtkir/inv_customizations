@@ -18,6 +18,7 @@ class Booking(Document):
 
 		amended_from: DF.Link | None
 		company: DF.Link
+		cost_center: DF.Link | None
 		create_sales_invoice: DF.Check
 		customer: DF.Link
 		customer_name: DF.SmallText | None
@@ -28,6 +29,8 @@ class Booking(Document):
 		naming_series: DF.Literal["Booking-.YYYY.-"]
 		notes: DF.Data | None
 		sales_person: DF.Link | None
+		sales_tax_template: DF.Link | None
+		selling_price_list: DF.Link
 		send_email: DF.Check
 		start_date: DF.Datetime
 		status: DF.Literal["Pending", "Booked", "Available"]
@@ -82,14 +85,24 @@ class Booking(Document):
         )
 
 	def create_sales_invoice_auto(self):
+		company = self.get("company") or get_default_company()
+		if not company:
+			frappe.throw(
+				_(
+					"Company is mandatory for generating an invoice. Please set a default company in Global Defaults."
+				)
+			)
+		
 		sales_invoice = frappe.new_doc("Sales Invoice")
+		sales_invoice.company = company
+		sales_invoice.set_posting_time = 1
 		sales_invoice.customer = self.customer
 		sales_invoice.posting_date = nowdate()
 		sales_invoice.posting_time = nowtime()
 		sales_invoice.due_date = nowdate()
 		sales_invoice.ignore_pricing_rule = 1
-		sales_invoice.company = self.company
-		
+		sales_invoice.cost_center = self.cost_center
+
 		for item in self.items:
 			sales_invoice.append("items", {
 				"item_code": item.item_code,
@@ -97,12 +110,18 @@ class Booking(Document):
                 "uom": item.uom,
             	"price_list_rate": item.rate,
             	"discount_percentage": item.discount_amount or 0,				
+            	"cost_center": self.cost_center,				
             })
-		
+
+		tax_template = self.sales_tax_template
+		if tax_template:
+			sales_invoice.tax_template = tax_template
+			sales_invoice.set_taxes()
+
+		sales_invoice.flags.ignore_mandatory = True
+
 		sales_invoice.set_missing_values()
-		sales_invoice.calculate_taxes_and_totals()
-		
-		sales_invoice.insert(ignore_permissions=True)
+		sales_invoice.save()
 
 	def set_amount_in_items(self):
 		for item in self.items:
