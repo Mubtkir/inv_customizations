@@ -115,7 +115,9 @@ frappe.ui.form.on("Booking Item", {
 
         set_amount_from_rate(frm, cdt, cdn);
     },
-    items_add(frm)    { frm.trigger("calculate_total_amount"); },
+    items_add(frm){ 
+        frm.trigger("calculate_total_amount"); 
+    },
     items_remove(frm) { frm.trigger("calculate_total_amount"); },
 });
 
@@ -131,7 +133,7 @@ function flt(v){ return parseFloat(v || 0) || 0; }
 
 function apply_qty_rule_and_override(frm, cdt, cdn) {
     const row = locals[cdt][cdn];
-    const base = flt(row.price_list_rate) || flt(row.rate) || 0;  // 👈 fallback
+    const base = flt(row.price_list_rate) || flt(row.rate) || 0;
 
     if (!base) {
         set_amount_from_rate(frm, cdt, cdn);
