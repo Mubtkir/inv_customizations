@@ -15,6 +15,7 @@
   "uom",
   "qty",
   "column_break_qmrk",
+  "price_list_rate",
   "rate",
   "discount_amount",
   "amount"
@@ -111,13 +112,21 @@
    "label": "Amount",
    "options": "currency",
    "read_only": 1
+  },
+  {
+   "fieldname": "price_list_rate",
+   "fieldtype": "Currency",
+   "label": "Price List Rate",
+   "options": "currency",
+   "print_hide": 1,
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-08-09 09:15:59.161991",
+ "modified": "2025-08-31 14:19:48.143905",
  "modified_by": "Administrator",
  "module": "Inv Customizations",
  "name": "Booking Item",

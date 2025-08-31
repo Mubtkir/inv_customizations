@@ -22,6 +22,7 @@ class BookingItem(Document):
 		parent: DF.Data
 		parentfield: DF.Data
 		parenttype: DF.Data
+		price_list_rate: DF.Currency
 		qty: DF.Float
 		rate: DF.Currency
 		uom: DF.Link
